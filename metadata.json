@@ -1,0 +1,6 @@
+{
+  "name": "APP TỰ ÔN TẬP - PHẠM HẬU",
+  "description": "Nền tảng tự ôn tập và luyện thi môn Toán THPT Kết Nối Tri Thức (Lớp 10, 11, 12). Hỗ trợ công thức MathType chuẩn đẹp, công thức vectơ chuẩn mực, kẻ bảng biến thiên chuẩn sư phạm, vẽ đồ thị hàm số và phòng thi ảo format mới 2025.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

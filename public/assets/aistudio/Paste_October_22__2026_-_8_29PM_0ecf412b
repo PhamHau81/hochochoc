@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathConnect THPT - Tự Ôn Tập Toán Sách Kết Nối Tri Thức</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .katex-display { margin: 0.5em 0; overflow-x: auto; overflow-y: hidden; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- TOP NAVBAR -->
+  <header class="bg-indigo-900 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand -->
+        <div class="flex items-center space-x-3 cursor-pointer" id="nav-brand-btn">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-400 to-indigo-500 flex items-center justify-center shadow-md">
+            <i class="fa-solid fa-shapes text-xl text-white"></i>
+          </div>
+          <div>
+            <div class="font-extrabold text-lg tracking-tight flex items-center gap-2">
+              MathConnect <span class="text-xs bg-amber-400 text-indigo-950 font-bold px-2 py-0.5 rounded-full">KNTT THPT</span>
+            </div>
+            <div class="text-xs text-indigo-200">Bộ sách Kết Nối Tri Thức Với Cuộc Sống</div>
+          </div>
+        </div>
+
+        <!-- Grade Selector -->
+        <div class="hidden md:flex items-center bg-indigo-950/60 p-1 rounded-xl border border-indigo-700/50">
+          <button class="grade-tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-indigo-200 hover:text-white" data-grade="10">Lớp 10</button>
+          <button class="grade-tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-indigo-200 hover:text-white" data-grade="11">Lớp 11</button>
+          <button class="grade-tab-btn px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 text-indigo-200 hover:text-white" data-grade="12">Lớp 12</button>
+        </div>
+
+        <!-- User Stats & Navigation -->
+        <div class="flex items-center space-x-2 sm:space-x-4">
+          <div class="flex items-center gap-1.5 bg-amber-400/20 text-amber-300 border border-amber-400/30 px-3 py-1 rounded-full text-xs font-bold">
+            <i class="fa-solid fa-fire text-amber-400"></i>
+            <span id="streak-counter">7 ngày</span>
+          </div>
+          <div class="flex items-center gap-1.5 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-bold">
+            <i class="fa-solid fa-star text-emerald-400"></i>
+            <span id="score-counter">1.450 đ</span>
+          </div>
+          <button id="btn-toggle-mistakes" class="relative p-2 text-indigo-200 hover:text-white hover:bg-indigo-800 rounded-lg transition" title="Sổ tay câu sai">
+            <i class="fa-solid fa-bookmark text-lg"></i>
+            <span id="mistake-badge" class="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">3</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Grade Bar -->
+    <div class="flex md:hidden bg-indigo-950 px-4 py-2 border-t border-indigo-800 justify-around text-sm font-medium">
+      <button class="grade-tab-btn-mobile px-3 py-1 rounded text-indigo-200 font-semibold" data-grade="10">Lớp 10</button>
+      <button class="grade-tab-btn-mobile px-3 py-1 rounded text-indigo-200 font-semibold" data-grade="11">Lớp 11</button>
+      <button class="grade-tab-btn-mobile px-3 py-1 rounded text-indigo-200 font-semibold" data-grade="12">Lớp 12</button>
+    </div>
+  </header>
+
+  <!-- SUB NAVIGATION / TABS -->
+  <nav class="bg-white border-b border-slate-200 sticky top-16 md:top-16 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex space-x-2 sm:space-x-8 overflow-x-auto py-2.5 custom-scrollbar text-sm font-semibold">
+        <button id="tab-nav-practice" class="nav-mode-btn flex items-center gap-2 px-3 py-2 rounded-lg text-indigo-600 bg-indigo-50 border border-indigo-200 whitespace-nowrap transition">
+          <i class="fa-solid fa-book-open"></i> Ôn Luyện Dạng Toán
+        </button>
+        <button id="tab-nav-statistics" class="nav-mode-btn flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 whitespace-nowrap transition">
+          <i class="fa-solid fa-chart-simple"></i> Công Cụ Mẫu Số Liệu & Casio
+        </button>
+        <button id="tab-nav-exam" class="nav-mode-btn flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 whitespace-nowrap transition">
+          <i class="fa-solid fa-clock"></i> Phòng Thi Ảo (Format 2025)
+        </button>
+        <button id="tab-nav-curriculum" class="nav-mode-btn flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 whitespace-nowrap transition">
+          <i class="fa-solid fa-sitemap"></i> Bản Đồ Tri Thức KNTT
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+    <!-- VIEW 1: PRACTICE BY TOPIC -->
+    <section id="view-practice" class="space-y-6">
+      <!-- Breadcrumb & Topic Selector Bar -->
+      <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="text-xs uppercase font-bold tracking-wider text-indigo-600 mb-1 flex items-center gap-1.5">
+            <span id="current-grade-label">TOÁN LỚP 11</span> • BỘ SÁCH KẾT NỐI TRI THỨC VỚI CUỘC SỐNG
+          </div>
+          <h1 id="current-chapter-title" class="text-xl sm:text-2xl font-extrabold text-slate-900">
+            Chương III: Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm
+          </h1>
+        </div>
+
+        <!-- Topic dropdown -->
+        <div class="flex items-center gap-3">
+          <label for="chapter-select" class="text-xs font-bold text-slate-500 whitespace-nowrap">Chọn chuyên đề:</label>
+          <select id="chapter-select" class="bg-slate-100 border border-slate-300 text-slate-800 text-sm rounded-xl px-3 py-2 font-medium focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+            <!-- Populated dynamically via JS -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Theory Summary Accordion / Card -->
+      <div class="bg-gradient-to-br from-indigo-900 to-indigo-800 text-white p-5 sm:p-6 rounded-2xl shadow-md">
+        <div class="flex items-center justify-between cursor-pointer" id="btn-toggle-theory">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-amber-300">
+              <i class="fa-solid fa-lightbulb text-lg"></i>
+            </div>
+            <div>
+              <h2 class="text-lg font-bold">Tóm Tắt Công Thức & Khắc Cốt Ghi Tâm</h2>
+              <p class="text-xs text-indigo-200">Nhấn để thu gọn hoặc mở rộng bảng công thức chuẩn SGK</p>
+            </div>
+          </div>
+          <i id="theory-chevron" class="fa-solid fa-chevron-up text-indigo-300 transition-transform"></i>
+        </div>
+        <div id="theory-content" class="mt-4 pt-4 border-t border-indigo-700/60 text-sm leading-relaxed space-y-3">
+          <!-- Theory rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- Filter Question Format Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs sm:text-sm font-semibold">
+        <span class="text-slate-500 mr-1 whitespace-nowrap"><i class="fa-solid fa-filter"></i> Dạng câu hỏi:</span>
+        <button class="filter-format-btn px-3.5 py-1.5 rounded-full bg-indigo-600 text-white font-bold whitespace-nowrap shadow-sm" data-format="all">Tất cả (3 định dạng)</button>
+        <button class="filter-format-btn px-3.5 py-1.5 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap" data-format="multiple_choice_4">Phần I: 4 Lựa chọn</button>
+        <button class="filter-format-btn px-3.5 py-1.5 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap" data-format="true_false_4">Phần II: Đúng/Sai (4 ý)</button>
+        <button class="filter-format-btn px-3.5 py-1.5 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap" data-format="short_answer">Phần III: Điền số</button>
+      </div>
+
+      <!-- Questions List Container -->
+      <div id="questions-list" class="space-y-6">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: SMART STATISTICS & CASIO TOOLKIT -->
+    <section id="view-statistics" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+          <div>
+            <div class="text-xs uppercase font-bold text-indigo-600 tracking-wider">CÔNG CỤ ĐỘC QUYỀN SÁCH KẾT NỐI TRI THỨC</div>
+            <h2 class="text-2xl font-black text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-calculator text-indigo-600"></i> Trình Phân Tích Mẫu Số Liệu Ghép Nhóm
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">Tự động tính các số đặc trưng: Trung bình, Trung vị, Tứ phân vị, Mốt, Phương sai kèm lời giải từng bước và giả lập Casio.</p>
+          </div>
+          <div class="flex gap-2">
+            <button id="btn-sample-data-1" class="px-3 py-1.5 bg-indigo-50 text-indigo-700 hover:bg-indigo-100 rounded-lg text-xs font-bold border border-indigo-200">
+              Mẫu: Giờ tự học Toán
+            </button>
+            <button id="btn-sample-data-2" class="px-3 py-1.5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-lg text-xs font-bold border border-slate-300">
+              Mẫu: Năng suất lúa
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+          <!-- Left: Input Table -->
+          <div class="lg:col-span-5 space-y-4">
+            <h3 class="font-bold text-slate-800 text-sm flex items-center justify-between">
+              <span>Bảng tần số ghép nhóm:</span>
+              <button id="btn-add-stat-row" class="text-xs bg-indigo-600 text-white px-2.5 py-1 rounded-md hover:bg-indigo-700 transition">
+                <i class="fa-solid fa-plus"></i> Thêm nhóm
+              </button>
+            </h3>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+              <table class="w-full text-left text-sm" id="stat-input-table">
+                <thead class="bg-slate-100 text-slate-700 text-xs uppercase font-bold">
+                  <tr>
+                    <th class="p-2.5">Khoảng [a; b)</th>
+                    <th class="p-2.5">Tần số (m)</th>
+                    <th class="p-2.5 text-center">Xóa</th>
+                  </tr>
+                </thead>
+                <tbody id="stat-table-body" class="divide-y divide-slate-200">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <button id="btn-compute-statistics" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> Phân Tích & Vẽ Biểu Đồ
+            </button>
+
+            <!-- Casio Simulator Box -->
+            <div class="bg-slate-900 text-white p-4 rounded-xl border border-slate-700 text-xs space-y-2">
+              <div class="font-bold text-amber-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-microchip"></i> Hướng Dẫn Bấm Máy Tính Cầm Tay:
+              </div>
+              <div>
+                <span class="font-semibold text-emerald-300">Casio fx-580VN X:</span> Bấm `SHIFT` $
+ightarrow$ `MENU` $
+ightarrow$ `phím xuống` $
+ightarrow$ `3: Thống kê` $
+ightarrow$ `1: Bật`. Tiếp tục bấm `MENU` $
+ightarrow$ `6` $
+ightarrow$ `1`. Nhập $c_i$ vào cột $x$ và $m_i$ vào cột $FREQ$ $
+ightarrow$ Bấm `OPTN 2`.
+              </div>
+              <div>
+                <span class="font-semibold text-sky-300">Casio fx-880BTG:</span> `HOME` $
+ightarrow$ `Statistics` $
+ightarrow$ `1-Variable` $
+ightarrow$ `TOOLS` $
+ightarrow$ `Frequency: On` $
+ightarrow$ Nhập dữ liệu $
+ightarrow$ Bấm `EXE`.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Output Metrics & Chart -->
+          <div class="lg:col-span-7 space-y-6">
+            <!-- Metrics Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div class="bg-indigo-50 border border-indigo-200 p-3 rounded-xl">
+                <div class="text-xs text-indigo-600 font-bold">Cỡ mẫu (n)</div>
+                <div id="stat-val-n" class="text-xl font-black text-indigo-950 mt-0.5">50</div>
+              </div>
+              <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl">
+                <div class="text-xs text-amber-600 font-bold">Trung bình ($ar{x}$)</div>
+                <div id="stat-val-mean" class="text-xl font-black text-amber-950 mt-0.5">10,08</div>
+              </div>
+              <div class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl">
+                <div class="text-xs text-emerald-600 font-bold">Trung vị ($M_e$)</div>
+                <div id="stat-val-median" class="text-xl font-black text-emerald-950 mt-0.5">10,00</div>
+              </div>
+              <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl">
+                <div class="text-xs text-rose-600 font-bold">Mốt ($M_o$)</div>
+                <div id="stat-val-mode" class="text-xl font-black text-rose-950 mt-0.5">9,85</div>
+              </div>
+            </div>
+
+            <!-- Quartiles & Dispersion -->
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-wrap justify-between items-center text-xs gap-3 font-semibold">
+              <div>Tứ phân vị $Q_1$: <span id="stat-val-q1" class="font-bold text-indigo-600 text-sm">6,83</span></div>
+              <div>Tứ phân vị $Q_2$: <span id="stat-val-q2" class="font-bold text-indigo-600 text-sm">10,00</span></div>
+              <div>Tứ phân vị $Q_3$: <span id="stat-val-q3" class="font-bold text-indigo-600 text-sm">13,27</span></div>
+              <div>Khoảng $\Delta_Q$: <span id="stat-val-iqr" class="font-bold text-indigo-600 text-sm">6,44</span></div>
+            </div>
+
+            <!-- Chart Container -->
+            <div class="bg-white p-4 border border-slate-200 rounded-xl">
+              <h4 class="text-xs font-bold text-slate-600 mb-2 uppercase">Biểu Đồ Tần Số Ghép Nhóm (Histogram)</h4>
+              <div class="relative h-64 w-full">
+                <canvas id="stat-histogram-chart"></canvas>
+              </div>
+            </div>
+
+            <!-- Detailed Steps Explanation Box -->
+            <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-2" id="stat-calculation-steps">
+              <!-- Dynamically filled with step by step formulas -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: MOCK EXAM SIMULATOR -->
+    <section id="view-exam" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <!-- Exam Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200 gap-4">
+          <div>
+            <span class="text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-2.5 py-1 rounded-full uppercase">Kỳ Thi Thử Tốt Nghiệp THPT 2025</span>
+            <h2 class="text-2xl font-black text-slate-900 mt-2">Đề Thi Khảo Sát Toàn Diện Môn Toán (Chuẩn Format Bộ GD&ĐT)</h2>
+            <p class="text-xs text-slate-500 mt-1">Cấu trúc 3 phần: 12 câu Nhiều lựa chọn • 4 câu Đúng/Sai • 6 câu Trả lời ngắn</p>
+          </div>
+          <!-- Timer & Finish Button -->
+          <div class="flex items-center gap-3">
+            <div class="bg-slate-900 text-white px-4 py-2 rounded-xl flex items-center gap-2">
+              <i class="fa-solid fa-stopwatch text-amber-400"></i>
+              <span id="exam-timer" class="font-mono text-lg font-bold">45:00</span>
+            </div>
+            <button id="btn-submit-exam" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 text-sm">
+              <i class="fa-solid fa-paper-plane"></i> Nộp Bài
+            </button>
+          </div>
+        </div>
+
+        <!-- Exam Layout: Left Questions, Right OMR Map -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+          <div class="lg:col-span-9 space-y-8" id="exam-questions-container">
+            <!-- Questions rendered here -->
+          </div>
+
+          <!-- Right Floating Navigator -->
+          <div class="lg:col-span-3">
+            <div class="sticky top-32 bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+              <h3 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center justify-between">
+                <span>Phiếu Trả Lời (OMR)</span>
+                <span id="omr-completed-count" class="text-indigo-600 font-bold">0/8 đã làm</span>
+              </h3>
+              <div class="text-[11px] text-slate-500">Bấm số câu để chuyển nhanh:</div>
+              <div class="grid grid-cols-4 gap-2" id="omr-grid-buttons">
+                <!-- Dynamically generated -->
+              </div>
+
+              <div class="pt-3 border-t border-slate-200 text-[11px] text-slate-500 space-y-1">
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-indigo-600 inline-block"></span> Đã chọn</div>
+                <div class="flex items-center gap-2"><span class="w-3 h-3 rounded bg-white border border-slate-300 inline-block"></span> Chưa làm</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: CURRICULUM MAP -->
+    <section id="view-curriculum" class="hidden space-y-6">
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <h2 class="text-2xl font-black text-slate-900 mb-2">Bản Đồ Cấu Trúc Khung Chương Trình KNTT (Lớp 10, 11, 12)</h2>
+        <p class="text-sm text-slate-500 mb-6">Mạch kiến thức 4 trụ cột liên thông xuyên suốt 3 năm THPT.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Grade 10 Column -->
+          <div class="border border-indigo-200 rounded-2xl p-4 bg-indigo-50/40">
+            <div class="font-extrabold text-indigo-900 text-lg pb-3 border-b border-indigo-200 flex items-center justify-between">
+              <span>LỚP 10 (Nền Tảng)</span>
+              <span class="text-xs bg-indigo-200 text-indigo-800 px-2 py-0.5 rounded-full font-bold">9 Chương</span>
+            </div>
+            <ul class="mt-3 space-y-2 text-xs font-medium text-slate-700">
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương I: Mệnh đề & Tập hợp</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương II: Bất PT bậc nhất 2 ẩn (Quy hoạch tuyến tính)</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương III: Hệ thức lượng trong tam giác</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương IV: Vectơ & Tích vô hướng</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương V: Thống kê không ghép nhóm & Sai số</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VI: Hàm số bậc hai & Parabol</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VII: Phương pháp tọa độ Oxy & 3 đường Conic</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VIII: Đại số tổ hợp & Nhị thức Newton</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương IX: Xác suất cổ điển</li>
+            </ul>
+          </div>
+
+          <!-- Grade 11 Column -->
+          <div class="border border-emerald-200 rounded-2xl p-4 bg-emerald-50/40">
+            <div class="font-extrabold text-emerald-900 text-lg pb-3 border-b border-emerald-200 flex items-center justify-between">
+              <span>LỚP 11 (Cơ Sở Chuyên Sâu)</span>
+              <span class="text-xs bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-full font-bold">9 Chương</span>
+            </div>
+            <ul class="mt-3 space-y-2 text-xs font-medium text-slate-700">
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương I: Hàm số lượng giác & PT lượng giác</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương II: Cấp số cộng & Cấp số nhân (Tài chính)</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs font-bold text-emerald-800 border-l-4 border-emerald-500">Chương III: Mẫu số liệu ghép nhóm (Xu thế trung tâm)</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương IV: Quan hệ song song không gian</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương V: Giới hạn & Hàm số liên tục</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VI: Hàm số mũ & Lôgarit</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VII: Quan hệ vuông góc & Thể tích khối</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VIII: Các quy tắc tính xác suất</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương IX: Đạo hàm & Ý nghĩa thực tiễn</li>
+            </ul>
+          </div>
+
+          <!-- Grade 12 Column -->
+          <div class="border border-purple-200 rounded-2xl p-4 bg-purple-50/40">
+            <div class="font-extrabold text-purple-900 text-lg pb-3 border-b border-purple-200 flex items-center justify-between">
+              <span>LỚP 12 (Trọng Tâm Tốt Nghiệp)</span>
+              <span class="text-xs bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full font-bold">6 Chương</span>
+            </div>
+            <ul class="mt-3 space-y-2 text-xs font-medium text-slate-700">
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương I: Khảo sát hàm số & Tối ưu hóa cực trị</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương II: Vectơ & Tọa độ trong không gian</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs font-bold text-purple-800 border-l-4 border-purple-500">Chương III: Mẫu số liệu ghép nhóm (Đo phân tán)</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương IV: Nguyên hàm, Tích phân & Ứng dụng</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương V: Phương pháp tọa độ Oxyz (Mặt cầu, mp, đt)</li>
+              <li class="p-2 bg-white rounded-lg shadow-xs">Chương VI: Xác suất có điều kiện & Công thức Bayes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MISTAKE NOTEBOOK SLIDEOVER MODAL -->
+  <div id="mistake-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex justify-end">
+    <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col transform transition-transform">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-bookmark text-rose-500 text-lg"></i>
+          <h3 class="font-black text-slate-800 text-lg">Sổ Tay Câu Hỏi Cần Ôn Lại</h3>
+        </div>
+        <button id="btn-close-mistakes" class="text-slate-400 hover:text-slate-600 p-2 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="p-4 flex-1 overflow-y-auto space-y-3 custom-scrollbar" id="mistakes-container">
+        <!-- Rendered items -->
+      </div>
+
+      <div class="p-4 border-t border-slate-200 bg-slate-50 flex gap-2">
+        <button id="btn-clear-mistakes" class="w-full py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition">
+          Xóa Tất Cả
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAM RESULT MODAL -->
+  <div id="exam-result-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white max-w-lg w-full rounded-2xl shadow-2xl p-6 text-center space-y-4">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner">
+        <i class="fa-solid fa-trophy"></i>
+      </div>
+      <h3 class="text-2xl font-black text-slate-900">Hoàn Thành Bài Thi!</h3>
+      <div class="text-sm text-slate-500">Kết quả bài thi khảo sát tốt nghiệp THPT theo chuẩn format Bộ GD&ĐT:</div>
+
+      <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <div>
+          <div class="text-xs text-slate-500 font-bold">Điểm Số</div>
+          <div id="res-score" class="text-2xl font-black text-indigo-600">8.5 / 10</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 font-bold">Số Câu Đúng</div>
+          <div id="res-correct" class="text-2xl font-black text-emerald-600">7 / 8</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 font-bold">Thời Gian</div>
+          <div id="res-time" class="text-2xl font-black text-amber-600">12:35</div>
+        </div>
+      </div>
+
+      <p id="res-feedback" class="text-xs text-slate-600 italic bg-amber-50 p-3 rounded-lg border border-amber-200">
+        Bạn nắm rất vững các công thức tính trung vị và tứ phân vị! Hãy chú ý hơn ở dạng bài xác suất có điều kiện.
+      </p>
+
+      <button id="btn-close-exam-result" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md transition">
+        Xem Chi Tiết Lời Giải & Tiếp Tục Ôn Luyện
+      </button>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm z-50 transform translate-y-20 opacity-0 transition-all duration-300">
+    <i id="toast-icon" class="fa-solid fa-check text-emerald-400"></i>
+    <span id="toast-msg">Đã lưu thành công!</span>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    // --- DATABASE: COMPREHENSIVE CURRICULUM & QUESTIONS ---
+    const APP_DATA = {
+      10: {
+        title: "Toán Lớp 10 - Kết Nối Tri Thức",
+        chapters: [
+          {
+            id: "10_ch2",
+            name: "Chương II: Bất phương trình & Hệ bất phương trình bậc nhất hai ẩn",
+            theory: `
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-700/50">
+                  <div class="font-bold text-amber-300 mb-1">1. Miền nghiệm bất phương trình:</div>
+                  <p>Bất phương trình $ax + by + c \le 0$ có bờ là đường thẳng $d: ax + by + c = 0$. Điểm $O(0;0)$ thường được dùng làm điểm thử nếu $c \ne 0$.</p>
+                </div>
+                <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-700/50">
+                  <div class="font-bold text-amber-300 mb-1">2. Bài toán quy hoạch tuyến tính:</div>
+                  <p>Giá trị lớn nhất hoặc nhỏ nhất của biểu thức mục tiêu $F(x,y) = ax + by$ trên miền đa giác nghiệm luôn đạt tại một trong các đỉnh của đa giác đó.</p>
+                </div>
+              </div>
+            `,
+            questions: [
+              {
+                id: "q10_1",
+                format: "multiple_choice_4",
+                difficulty: "Nhận biết",
+                content: "Cặp số nào sau đây là một nghiệm của bất phương trình $2x - 3y + 1 > 0$?",
+                options: [
+                  { id: "A", text: "$(1; 2)$" },
+                  { id: "B", text: "$(2; 1)$" },
+                  { id: "C", text: "$(0; 1)$" },
+                  { id: "D", text: "(-1; 1)" }
+                ],
+                correctAnswer: "B",
+                hints: [
+                  "Thay trực tiếp tọa độ $(x; y)$ của từng phương án vào vế trái $2x - 3y + 1$.",
+                  "Với cặp $(2; 1)$, ta có $2(2) - 3(1) + 1 = 4 - 3 + 1 = 2 > 0$ (thỏa mãn)."
+                ],
+                solution: "Thay $(x=2, y=1)$ vào vế trái: $2(2) - 3(1) + 1 = 2 > 0$. Vậy $(2; 1)$ là nghiệm của bất phương trình."
+              },
+              {
+                id: "q10_2",
+                format: "short_answer",
+                difficulty: "Vận dụng",
+                content: "Một xưởng sản xuất 2 loại sản phẩm I và II. Mỗi kg sản phẩm I lãi 30 nghìn đồng, mỗi kg sản phẩm II lãi 40 nghìn đồng. Biết miền nghiệm biểu diễn số lượng $x, y$ (kg) là tứ giác có 4 đỉnh $O(0;0), A(0;4), B(3;3), C(4;0)$. Lợi nhuận lớn nhất mà xưởng có thể đạt được là bao nhiêu nghìn đồng?",
+                correctAnswer: "210",
+                hints: [
+                  "Hàm mục tiêu lợi nhuận là $F(x, y) = 30x + 40y$.",
+                  "Tính giá trị của $F$ tại 4 đỉnh: $O(0;0), A(0;4), B(3;3), C(4;0)$."
+                ],
+                solution: "Tính giá trị $F(x, y) = 30x + 40y$ tại các đỉnh: $F(O) = 0$, $F(A) = 30(0)+40(4) = 160$, $F(B) = 30(3)+40(3) = 90+120 = 210$, $F(C) = 30(4)+40(0) = 120$. Do đó lợi nhuận lớn nhất là 210 nghìn đồng tại đỉnh $B(3;3)$."
+              }
+            ]
+          },
+          {
+            id: "10_ch7",
+            name: "Chương VII: Phương pháp tọa độ trong mặt phẳng Oxy & Ba đường Conic",
+            theory: `
+              <div class="space-y-2 text-xs">
+                <p>• <b>Phương trình tổng quát đường thẳng:</b> $ax + by + c = 0$ ($a^2+b^2 \ne 0$). Khoảng cách từ $M(x_0; y_0)$ đến $\Delta$: $d(M, \Delta) = \frac{|ax_0+by_0+c|}{\sqrt{a^2+b^2}}$.</p>
+                <p>• <b>Phương trình Elip chính tắc:</b> $\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$ ($a^2 = b^2 + c^2$), tiêu cự $2c$, tâm sai $e = \frac{c}{a} < 1$.</p>
+              </div>
+            `,
+            questions: [
+              {
+                id: "q10_3",
+                format: "multiple_choice_4",
+                difficulty: "Thông hiểu",
+                content: "Khoảng cách từ điểm $M(1; -2)$ đến đường thẳng $\Delta: 3x - 4y + 4 = 0$ bằng:",
+                options: [
+                  { id: "A", text: "3" },
+                  { id: "B", text: "5" },
+                  { id: "C", text: "15" },
+                  { id: "D", text: "2" }
+                ],
+                correctAnswer: "A",
+                hints: [
+                  "Áp dụng công thức khoảng cách $d(M, \Delta) = \frac{|3x_0 - 4y_0 + 4|}{\sqrt{3^2 + (-4)^2}}$.",
+                  "Thay số: Tử số là $|3(1) - 4(-2) + 4| = |3 + 8 + 4| = 15$."
+                ],
+                solution: "$d(M, \Delta) = \frac{|3(1) - 4(-2) + 4|}{\sqrt{3^2 + (-4)^2}} = \frac{15}{5} = 3$."
+              }
+            ]
+          }
+        ]
+      },
+      11: {
+        title: "Toán Lớp 11 - Kết Nối Tri Thức",
+        chapters: [
+          {
+            id: "11_ch3",
+            name: "Chương III: Các số đặc trưng đo xu thế trung tâm của mẫu số liệu ghép nhóm",
+            theory: `
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-700/50">
+                  <div class="font-bold text-amber-300">1. Số trung bình $\bar{x}$:</div>
+                  <p>$$\bar{x} = \frac{\sum m_i c_i}{n}$$</p>
+                  <p class="text-[11px] text-indigo-200">với $c_i = \frac{a_i + a_{i+1}}{2}$ là giá trị đại diện.</p>
+                </div>
+                <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-700/50">
+                  <div class="font-bold text-amber-300">2. Trung vị $M_e$:</div>
+                  <p>$$M_e = a_p + \frac{\frac{n}{2} - C}{m_p} \cdot h$$</p>
+                  <p class="text-[11px] text-indigo-200">Nhóm $[a_p; a_{p+1})$ đầu tiên có $cf_p \ge \frac{n}{2}$, $C = cf_{p-1}$.</p>
+                </div>
+                <div class="bg-indigo-950/40 p-3 rounded-xl border border-indigo-700/50">
+                  <div class="font-bold text-amber-300">3. Mốt $M_o$:</div>
+                  <p>$$M_o = a_j + \frac{m_j - m_{j-1}}{(m_j - m_{j-1}) + (m_j - m_{j+1})} \cdot h$$</p>
+                  <p class="text-[11px] text-indigo-200">Nhóm $[a_j; a_{j+1})$ có tần số $m_j$ lớn nhất.</p>
+                </div>
+              </div>
+            `,
+            questions: [
+              {
+                id: "q11_1",
+                format: "multiple_choice_4",
+                difficulty: "Nhận biết",
+                content: "Khảo sát thời gian tự học môn Toán ở nhà của 50 học sinh lớp 11 được cho bởi bảng sau:<br><table class='w-full border border-slate-300 my-2 text-center text-xs'><tr><td class='border p-1 bg-slate-100 font-bold'>Thời gian (h)</td><td class='border p-1'>[0; 4)</td><td class='border p-1'>[4; 8)</td><td class='border p-1'>[8; 12)</td><td class='border p-1'>[12; 16)</td><td class='border p-1'>[16; 20)</td></tr><tr><td class='border p-1 bg-slate-100 font-bold'>Số HS</td><td class='border p-1'>4</td><td class='border p-1'>12</td><td class='border p-1'>18</td><td class='border p-1'>11</td><td class='border p-1'>5</td></tr></table>Nhóm chứa trung vị là:",
+                options: [
+                  { id: "A", text: "$[4; 8)$" },
+                  { id: "B", text: "$[8; 12)$" },
+                  { id: "C", text: "$[12; 16)$" },
+                  { id: "D", text: "$[16; 20)$" }
+                ],
+                correctAnswer: "B",
+                hints: [
+                  "Tính vị trí trung tâm: $\frac{n}{2} = \frac{50}{2} = 25$.",
+                  "Lập bảng tần số tích lũy: $cf_1 = 4$, $cf_2 = 16$, $cf_3 = 34$. Nhóm đầu tiên có $cf \ge 25$ là $[8; 12)$."
+                ],
+                solution: "Cỡ mẫu $n = 50 \Rightarrow \frac{n}{2} = 25$. Tần số tích lũy: nhóm 1 là 4; nhóm 2 là $4+12=16 < 25$; nhóm 3 là $16+18=34 \ge 25$. Vậy nhóm chứa trung vị là $[8; 12)$."
+              },
+              {
+                id: "q11_2",
+                format: "true_false_4",
+                difficulty: "Vận dụng",
+                content: "Đối với mẫu số liệu 50 học sinh ở bài toán trên, xét tính Đúng / Sai của các khẳng định sau:",
+                subQuestions: [
+                  { id: "a", statement: "Nhóm chứa mốt là nhóm $[8; 12)$.", isCorrect: true },
+                  { id: "b", statement: "Mốt của mẫu số liệu trên xấp xỉ bằng $9,85$ giờ.", isCorrect: true },
+                  { id: "c", statement: "Trung vị của mẫu số liệu trên bằng $10,0$ giờ.", isCorrect: true },
+                  { id: "d", statement: "Tứ phân vị thứ nhất $Q_1$ của mẫu số liệu bằng $8,0$ giờ.", isCorrect: false }
+                ],
+                hints: [
+                  "Nhóm mốt có tần số $18$ lớn nhất $\Rightarrow [8; 12)$.",
+                  "Tính $M_o = 8 + \frac{18-12}{(18-12)+(18-11)} \cdot 4 = 8 + \frac{24}{13} \approx 9,85$.",
+                  "Tính $Q_1$: $\frac{n}{4} = 12,5 \Rightarrow Q_1 = 4 + \frac{12,5-4}{12} \cdot 4 = 6,83 \ne 8,0$."
+                ],
+                solution: "Ý a: Đúng vì $m_3=18$ lớn nhất. Ý b: Đúng vì $M_o = 8 + \frac{6}{6+7}\cdot 4 \approx 9,85$. Ý c: Đúng vì $M_e = 8 + \frac{25-16}{18}\cdot 4 = 10,0$. Ý d: Sai vì $Q_1 = 4 + \frac{12,5-4}{12}\cdot 4 \approx 6,83$."
+              },
+              {
+                id: "q11_3",
+                format: "short_answer",
+                difficulty: "Vận dụng cao",
+                content: "Tính giá trị tứ phân vị thứ ba $Q_3$ của mẫu số liệu 50 học sinh trên (làm tròn kết quả đến hàng phần trăm).",
+                correctAnswer: "13.27",
+                hints: [
+                  "Tính vị trí: $\frac{3n}{4} = \frac{3 \cdot 50}{4} = 37,5$.",
+                  "Nhóm chứa $Q_3$ là $[12; 16)$ với $a_p = 12, h = 4, m_p = 11, C = 34$.",
+                  "Áp dụng công thức $Q_3 = 12 + \frac{37,5 - 34}{11} \cdot 4$."
+                ],
+                solution: "Ta có $\frac{3n}{4} = 37,5$. Tần số tích lũy: $cf_3 = 34 < 37,5$ và $cf_4 = 45 \ge 37,5$. Nhóm chứa $Q_3$ là $[12; 16)$. Do đó: $Q_3 = 12 + \frac{37,5 - 34}{11} \cdot 4 = 12 + \frac{14}{11} \approx 13,27$."
+              }
+            ]
+          },
+          {
+            id: "11_ch2",
+            name: "Chương II: Dãy số, Cấp số cộng & Cấp số nhân",
+            theory: `
+              <div class="text-xs space-y-2">
+                <p>• <b>Cấp số cộng:</b> $u_n = u_1 + (n-1)d$; $S_n = \frac{n(u_1+u_n)}{2}$.</p>
+                <p>• <b>Cấp số nhân:</b> $u_n = u_1 \cdot q^{n-1}$; $S_n = \frac{u_1(1-q^n)}{1-q}$ ($q \ne 1$).</p>
+                <p>• <b>Lãi kép thực tế:</b> $A_n = A_0(1+r)^n$.</p>
+              </div>
+            `,
+            questions: [
+              {
+                id: "q11_4",
+                format: "multiple_choice_4",
+                difficulty: "Thông hiểu",
+                content: "Cho cấp số cộng $(u_n)$ có số hạng đầu $u_1 = 3$ và công sai $d = 4$. Số hạng thứ 10 của cấp số cộng bằng:",
+                options: [
+                  { id: "A", text: "39" },
+                  { id: "B", text: "43" },
+                  { id: "C", text: "36" },
+                  { id: "D", text: "40" }
+                ],
+                correctAnswer: "A",
+                hints: [
+                  "Sử dụng công thức $u_n = u_1 + (n-1)d$.",
+                  "Thay $n=10$: $u_{10} = 3 + 9 \times 4$."
+                ],
+                solution: "$u_{10} = 3 + (10 - 1) \cdot 4 = 3 + 36 = 39$."
+              }
+            ]
+          }
+        ]
+      },
+      12: {
+        title: "Toán Lớp 12 - Kết Nối Tri Thức",
+        chapters: [
+          {
+            id: "12_ch1",
+            name: "Chương I: Ứng dụng đạo hàm để khảo sát hàm số & Tối ưu hóa thực tế",
+            theory: `
+              <div class="text-xs space-y-2">
+                <p>• <b>Khảo sát hàm phân thức:</b> $y = \frac{ax+b}{cx+d}$ có tiệm cận đứng $x = -\frac{d}{c}$, tiệm cận ngang $y = \frac{a}{c}$.</p>
+                <p>• <b>Tiệm cận xiên:</b> Đồ thị có tiệm cận xiên $y = ax+b$ khi $\lim_{x \to \pm\infty} [y - (ax+b)] = 0$.</p>
+                <p>• <b>Tối ưu hóa:</b> Đặt hàm mục tiêu $f(x)$ $\rightarrow$ Lập bảng biến thiên $\rightarrow$ Tìm GTLN/GTNN.</p>
+              </div>
+            `,
+            questions: [
+              {
+                id: "q12_1",
+                format: "multiple_choice_4",
+                difficulty: "Nhận biết",
+                content: "Đường tiệm cận đứng của đồ thị hàm số $y = \frac{2x - 1}{x + 3}$ là đường thẳng:",
+                options: [
+                  { id: "A", text: "$x = 2$" },
+                  { id: "B", text: "$x = -3$" },
+                  { id: "C", text: "$y = 2$" },
+                  { id: "D", text: "$y = -3$" }
+                ],
+                correctAnswer: "B",
+                hints: [
+                  "Tiệm cận đứng của hàm phân thức bậc nhất/bậc nhất là nghiệm của mẫu số.",
+                  "Giải phương trình $x + 3 = 0$."
+                ],
+                solution: "Mẫu số triệt tiêu khi $x + 3 = 0 \Leftrightarrow x = -3$. Do $\lim_{x \to -3^+} y = -\infty$, đường thẳng $x = -3$ là tiệm cận đứng."
+              },
+              {
+                id: "q12_2",
+                format: "short_answer",
+                difficulty: "Vận dụng",
+                content: "Một bác nông dân có 60 m lưới muốn rào một mảnh vườn hình chữ nhật sát một bờ tường thẳng (không cần rào phía bờ tường). Diện tích lớn nhất của mảnh vườn bác có thể rào được là bao nhiêu mét vuông?",
+                correctAnswer: "450",
+                hints: [
+                  "Gọi chiều rộng là $x$ (m). Chiều dài sẽ là $60 - 2x$ (m).",
+                  "Diện tích $S(x) = x(60 - 2x) = -2x^2 + 60x$. Tìm đỉnh parabol."
+                ],
+                solution: "Gọi 2 cạnh vuông góc với bờ tường là $x$ ($0 < x < 30$). Chiều dài cạnh song song bờ tường là $60 - 2x$. Diện tích là $S(x) = x(60 - 2x) = 60x - 2x^2$. Đạo hàm $S'(x) = 60 - 4x = 0 \Leftrightarrow x = 15$. Khi đó $S_{max} = 15(60 - 30) = 450 \text{ m}^2$."
+              }
+            ]
+          },
+          {
+            id: "12_ch6",
+            name: "Chương VI: Xác suất có điều kiện & Công thức Bayes",
+            theory: `
+              <div class="text-xs space-y-2">
+                <p>• <b>Xác suất có điều kiện:</b> $P(A|B) = \frac{P(AB)}{P(B)}$ ($P(B) > 0$).</p>
+                <p>• <b>Công thức Bayes:</b> $P(B_k|A) = \frac{P(B_k)P(A|B_k)}{\sum P(B_i)P(A|B_i)}$.</p>
+                <p>• Ứng dụng chẩn đoán y tế: Xét nghiệm dương tính nhưng xác suất mắc bệnh thực sự tùy thuộc vào tỷ lệ lưu hành bệnh trong cộng đồng.</p>
+              </div>
+            `,
+            questions: [
+              {
+                id: "q12_3",
+                format: "multiple_choice_4",
+                difficulty: "Thông hiểu",
+                content: "Một hộp chứa 5 quả cầu xanh và 3 quả cầu đỏ. Rút liên tiếp hai quả cầu không hoàn lại. Xác suất để quả thứ hai màu đỏ biết rằng quả thứ nhất màu xanh là:",
+                options: [
+                  { id: "A", text: "$\frac{3}{7}$" },
+                  { id: "B", text: "$\frac{3}{8}$" },
+                  { id: "C", text: "$\frac{5}{8}$" },
+                  { id: "D", text: "$\frac{2}{7}$" }
+                ],
+                correctAnswer: "A",
+                hints: [
+                  "Khi quả thứ nhất màu xanh đã được rút ra, trong hộp còn lại bao nhiêu quả cầu?",
+                  "Còn 4 quả xanh và 3 quả đỏ (tổng cộng 7 quả)."
+                ],
+                solution: "Sau khi rút 1 quả xanh, trong hộp còn lại $5 - 1 = 4$ quả xanh và 3 quả đỏ (tổng cộng 7 quả). Do đó xác suất rút được quả đỏ ở lần hai là $P = \frac{3}{7}$."
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    // --- APPLICATION STATE ---
+    const state = {
+      grade: 11,
+      currentChapterId: "11_ch3",
+      currentFilterFormat: "all",
+      userAnswers: {},
+      revealedHints: {},
+      showSolution: {},
+      mistakes: [],
+      streak: 7,
+      score: 1450,
+      exam: {
+        active: false,
+        timerInterval: null,
+        timeRemaining: 45 * 60, // 45 mins
+        answers: {}
+      },
+      statsData: [
+        { min: 0, max: 4, freq: 4 },
+        { min: 4, max: 8, freq: 12 },
+        { min: 8, max: 12, freq: 18 },
+        { min: 12, max: 16, freq: 11 },
+        { min: 16, max: 20, freq: 5 }
+      ],
+      chartInstance: null
+    };
+
+    // Load state from localStorage safely
+    try {
+      const savedMistakes = localStorage.getItem("mathconnect_mistakes");
+      if (savedMistakes) state.mistakes = JSON.parse(savedMistakes);
+      const savedScore = localStorage.getItem("mathconnect_score");
+      if (savedScore) state.score = parseInt(savedScore, 10);
+    } catch (e) {
+      console.warn("Storage not accessible");
+    }
+
+    // --- INITIALIZATION ---
+    document.addEventListener("DOMContentLoaded", () => {
+      initNavigation();
+      initGrade(state.grade);
+      initStatisticsTool();
+      initExam();
+      updateMistakeBadge();
+      renderAllMath();
+    });
+
+    // Helper: Render KaTeX
+    function renderAllMath() {
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "$", right: "$", display: false }
+          ],
+          throwOnError: false
+        });
+      }
+    }
+
+    // Helper: Toast
+    function showToast(msg, icon = "fa-check") {
+      const toast = document.getElementById("toast");
+      const toastMsg = document.getElementById("toast-msg");
+      const toastIcon = document.getElementById("toast-icon");
+      toastMsg.textContent = msg;
+      toastIcon.className = `fa-solid ${icon} text-emerald-400`;
+      toast.classList.remove("translate-y-20", "opacity-0");
+      setTimeout(() => {
+        toast.classList.add("translate-y-20", "opacity-0");
+      }, 3000);
+    }
+
+    // --- NAVIGATION LOGIC ---
+    function initNavigation() {
+      // Grade Tabs
+      document.querySelectorAll(".grade-tab-btn, .grade-tab-btn-mobile").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const g = parseInt(btn.dataset.grade, 10);
+          switchGrade(g);
+        });
+      });
+
+      // Sub Nav Modes
+      const modes = [
+        { id: "tab-nav-practice", view: "view-practice" },
+        { id: "tab-nav-statistics", view: "view-statistics" },
+        { id: "tab-nav-exam", view: "view-exam" },
+        { id: "tab-nav-curriculum", view: "view-curriculum" }
+      ];
+
+      modes.forEach(m => {
+        document.getElementById(m.id).addEventListener("click", () => {
+          modes.forEach(other => {
+            const btn = document.getElementById(other.id);
+            const view = document.getElementById(other.view);
+            if (other.id === m.id) {
+              btn.className = "nav-mode-btn flex items-center gap-2 px-3 py-2 rounded-lg text-indigo-600 bg-indigo-50 border border-indigo-200 whitespace-nowrap font-bold transition";
+              view.classList.remove("hidden");
+            } else {
+              btn.className = "nav-mode-btn flex items-center gap-2 px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-100 whitespace-nowrap font-semibold transition";
+              view.classList.add("hidden");
+            }
+          });
+          if (m.id === "tab-nav-statistics") {
+            setTimeout(renderStatisticsChart, 100);
+          }
+          renderAllMath();
+        });
+      });
+
+      // Brand Click -> Reset to practice
+      document.getElementById("nav-brand-btn").addEventListener("click", () => {
+        document.getElementById("tab-nav-practice").click();
+      });
+
+      // Mistakes Modal
+      document.getElementById("btn-toggle-mistakes").addEventListener("click", openMistakesModal);
+      document.getElementById("btn-close-mistakes").addEventListener("click", closeMistakesModal);
+      document.getElementById("btn-clear-mistakes").addEventListener("click", clearMistakes);
+
+      // Theory Accordion Toggle
+      document.getElementById("btn-toggle-theory").addEventListener("click", () => {
+        const content = document.getElementById("theory-content");
+        const chevron = document.getElementById("theory-chevron");
+        content.classList.toggle("hidden");
+        chevron.classList.toggle("rotate-180");
+      });
+
+      // Filter Question Format
+      document.querySelectorAll(".filter-format-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".filter-format-btn").forEach(b => {
+            b.className = "filter-format-btn px-3.5 py-1.5 rounded-full bg-slate-200 text-slate-700 hover:bg-slate-300 whitespace-nowrap";
+          });
+          btn.className = "filter-format-btn px-3.5 py-1.5 rounded-full bg-indigo-600 text-white font-bold whitespace-nowrap shadow-sm";
+          state.currentFilterFormat = btn.dataset.format;
+          renderQuestionsList();
+        });
+      });
+    }
+
+    function switchGrade(g) {
+      state.grade = g;
+      document.querySelectorAll(".grade-tab-btn, .grade-tab-btn-mobile").forEach(b => {
+        if (parseInt(b.dataset.grade, 10) === g) {
+          b.classList.add("bg-indigo-700", "text-white");
+          b.classList.remove("text-indigo-200");
+        } else {
+          b.classList.remove("bg-indigo-700", "text-white");
+          b.classList.add("text-indigo-200");
+        }
+      });
+      initGrade(g);
+    }
+
+    function initGrade(g) {
+      const gradeData = APP_DATA[g];
+      if (!gradeData) return;
+
+      document.getElementById("current-grade-label").textContent = `TOÁN LỚP ${g}`;
+      const select = document.getElementById("chapter-select");
+      select.innerHTML = "";
+
+      gradeData.chapters.forEach((ch, idx) => {
+        const opt = document.createElement("option");
+        opt.value = ch.id;
+        opt.textContent = ch.name;
+        select.appendChild(opt);
+      });
+
+      state.currentChapterId = gradeData.chapters[0].id;
+      select.value = state.currentChapterId;
+
+      select.onchange = (e) => {
+        state.currentChapterId = e.target.value;
+        loadChapter(state.currentChapterId);
+      };
+
+      loadChapter(state.currentChapterId);
+    }
+
+    function loadChapter(chId) {
+      const ch = APP_DATA[state.grade].chapters.find(c => c.id === chId);
+      if (!ch) return;
+
+      document.getElementById("current-chapter-title").textContent = ch.name;
+      document.getElementById("theory-content").innerHTML = ch.theory;
+      renderQuestionsList();
+      renderAllMath();
+    }
+
+    // --- RENDER PRACTICE QUESTIONS ---
+    function renderQuestionsList() {
+      const container = document.getElementById("questions-list");
+      container.innerHTML = "";
+
+      const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+      if (!ch) return;
+
+      let list = ch.questions;
+      if (state.currentFilterFormat !== "all") {
+        list = list.filter(q => q.format === state.currentFilterFormat);
+      }
+
+      if (list.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 bg-white rounded-2xl border border-slate-200 p-6 text-slate-400">
+            <i class="fa-solid fa-folder-open text-4xl mb-2"></i>
+            <p class="text-sm">Không có câu hỏi nào thuộc định dạng này trong chương.</p>
+          </div>
+        `;
+        return;
+      }
+
+      list.forEach((q, index) => {
+        const card = document.createElement("div");
+        card.className = "bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4 transition hover:border-indigo-300";
+        card.id = `q-card-${q.id}`;
+
+        let formatBadge = "";
+        if (q.format === "multiple_choice_4") formatBadge = '<span class="bg-blue-50 text-blue-700 border border-blue-200 text-xs px-2.5 py-0.5 rounded-full font-bold">Phần I: 4 Lựa chọn</span>';
+        else if (q.format === "true_false_4") formatBadge = '<span class="bg-purple-50 text-purple-700 border border-purple-200 text-xs px-2.5 py-0.5 rounded-full font-bold">Phần II: Đúng / Sai</span>';
+        else if (q.format === "short_answer") formatBadge = '<span class="bg-amber-50 text-amber-700 border border-amber-200 text-xs px-2.5 py-0.5 rounded-full font-bold">Phần III: Điền số</span>';
+
+        const isSaved = state.mistakes.some(m => m.id === q.id);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 bg-indigo-900 text-white rounded-lg flex items-center justify-center font-black text-xs">#${index + 1}</span>
+              ${formatBadge}
+              <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">${q.difficulty}</span>
+            </div>
+            <button class="btn-bookmark-question text-sm p-1.5 rounded-lg ${isSaved ? 'text-rose-500 hover:bg-rose-50' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'}" data-qid="${q.id}" title="Lưu câu hỏi">
+              <i class="${isSaved ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
+            </button>
+          </div>
+
+          <div class="text-sm sm:text-base font-medium text-slate-800 leading-relaxed q-content">
+            ${q.content}
+          </div>
+
+          <!-- Question Body based on format -->
+          <div class="q-body-area">
+            ${renderQuestionInteractiveArea(q)}
+          </div>
+
+          <!-- Socratic Hint & Solution Bar -->
+          <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2">
+              <button class="btn-hint-1 px-3 py-1.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg font-bold hover:bg-amber-100 transition" data-qid="${q.id}">
+                <i class="fa-solid fa-lightbulb"></i> Gợi ý 1 (Ý tưởng)
+              </button>
+              <button class="btn-hint-2 px-3 py-1.5 bg-amber-50 text-amber-800 border border-amber-200 rounded-lg font-bold hover:bg-amber-100 transition hidden" data-qid="${q.id}">
+                <i class="fa-solid fa-lightbulb"></i> Gợi ý 2 (Bước đầu)
+              </button>
+              <button class="btn-show-solution px-3 py-1.5 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg font-bold hover:bg-indigo-100 transition" data-qid="${q.id}">
+                <i class="fa-solid fa-book-open-reader"></i> Xem Lời Giải
+              </button>
+            </div>
+            <div id="feedback-${q.id}" class="text-xs font-bold"></div>
+          </div>
+
+          <!-- Hints Container -->
+          <div id="hint-box-${q.id}" class="hidden space-y-2 text-xs"></div>
+
+          <!-- Solution Container -->
+          <div id="solution-box-${q.id}" class="hidden p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-1.5 text-emerald-950">
+            <div class="font-bold flex items-center gap-1.5 text-emerald-800">
+              <i class="fa-solid fa-check-circle"></i> Lời Giải Chi Tiết Chuẩn KNTT:
+            </div>
+            <div class="leading-relaxed">${q.solution}</div>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      attachQuestionEvents();
+      renderAllMath();
+    }
+
+    function renderQuestionInteractiveArea(q) {
+      if (q.format === "multiple_choice_4") {
+        return `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            ${q.options.map(opt => `
+              <button class="btn-mc-option text-left px-4 py-2.5 rounded-xl border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 text-sm font-medium transition flex items-center gap-3" data-qid="${q.id}" data-opt="${opt.id}">
+                <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs border border-slate-300">${opt.id}</span>
+                <span>${opt.text}</span>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      } else if (q.format === "true_false_4") {
+        return `
+          <div class="space-y-2 border border-slate-200 rounded-xl p-3 bg-slate-50/50">
+            ${q.subQuestions.map(sub => `
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 rounded-lg bg-white border border-slate-100 text-xs">
+                <div class="font-medium text-slate-800 flex-1"><span class="font-bold text-indigo-700">${sub.id})</span> ${sub.statement}</div>
+                <div class="flex items-center gap-2">
+                  <button class="btn-tf-choice px-3 py-1 rounded-md font-bold border border-slate-300 hover:bg-emerald-50 hover:border-emerald-500" data-qid="${q.id}" data-sub="${sub.id}" data-val="true">Đúng</button>
+                  <button class="btn-tf-choice px-3 py-1 rounded-md font-bold border border-slate-300 hover:bg-rose-50 hover:border-rose-500" data-qid="${q.id}" data-sub="${sub.id}" data-val="false">Sai</button>
+                </div>
+              </div>
+            `).join('')}
+            <div class="pt-2 flex justify-end">
+              <button class="btn-check-tf px-4 py-1.5 bg-indigo-600 text-white rounded-lg font-bold text-xs hover:bg-indigo-700 transition" data-qid="${q.id}">
+                Chấm điểm Đúng/Sai
+              </button>
+            </div>
+          </div>
+        `;
+      } else if (q.format === "short_answer") {
+        return `
+          <div class="flex items-center gap-3">
+            <input type="text" class="input-short-answer bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-44" placeholder="Nhập đáp số số..." id="input-ans-${q.id}">
+            <button class="btn-check-short-ans px-5 py-2 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition" data-qid="${q.id}">
+              Kiểm Tra
+            </button>
+          </div>
+        `;
+      }
+      return "";
+    }
+
+    function attachQuestionEvents() {
+      // Multiple Choice Click
+      document.querySelectorAll(".btn-mc-option").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const opt = btn.dataset.opt;
+          const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+          const q = ch.questions.find(item => item.id === qid);
+          const feedback = document.getElementById(`feedback-${qid}`);
+
+          const parent = btn.closest(".q-body-area");
+          parent.querySelectorAll(".btn-mc-option").forEach(b => {
+            b.classList.remove("bg-emerald-100", "border-emerald-500", "bg-rose-100", "border-rose-500", "text-emerald-900", "text-rose-900");
+          });
+
+          if (opt === q.correctAnswer) {
+            btn.classList.add("bg-emerald-100", "border-emerald-500", "text-emerald-900");
+            feedback.innerHTML = '<span class="text-emerald-600"><i class="fa-solid fa-check"></i> Chính xác! (+10đ)</span>';
+            state.score += 10;
+            updateScoreDisplay();
+          } else {
+            btn.classList.add("bg-rose-100", "border-rose-500", "text-rose-900");
+            feedback.innerHTML = '<span class="text-rose-600"><i class="fa-solid fa-xmark"></i> Chưa đúng! Hãy xem gợi ý.</span>';
+            // Auto add to mistakes
+            addMistake(q);
+          }
+        });
+      });
+
+      // True False Check
+      document.querySelectorAll(".btn-tf-choice").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const sub = btn.dataset.sub;
+          const val = btn.dataset.val === "true";
+          const row = btn.closest("div");
+          row.querySelectorAll(".btn-tf-choice").forEach(b => {
+            b.classList.remove("bg-indigo-600", "text-white");
+          });
+          btn.classList.add("bg-indigo-600", "text-white");
+          if (!state.userAnswers[qid]) state.userAnswers[qid] = {};
+          state.userAnswers[qid][sub] = val;
+        });
+      });
+
+      document.querySelectorAll(".btn-check-tf").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+          const q = ch.questions.find(item => item.id === qid);
+          const userAns = state.userAnswers[qid] || {};
+          let correctCount = 0;
+
+          q.subQuestions.forEach(sub => {
+            const isUserCorrect = userAns[sub.id] === sub.isCorrect;
+            if (isUserCorrect) correctCount++;
+          });
+
+          const feedback = document.getElementById(`feedback-${qid}`);
+          if (correctCount === 4) {
+            feedback.innerHTML = `<span class="text-emerald-600"><i class="fa-solid fa-check-double"></i> Xuất sắc! Đúng cả 4 ý (+20đ)</span>`;
+            state.score += 20;
+            updateScoreDisplay();
+          } else {
+            feedback.innerHTML = `<span class="text-amber-600">Bạn làm đúng ${correctCount}/4 ý. Hãy xem lời giải chi tiết.</span>`;
+            addMistake(q);
+          }
+        });
+      });
+
+      // Short Answer Check
+      document.querySelectorAll(".btn-check-short-ans").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+          const q = ch.questions.find(item => item.id === qid);
+          const input = document.getElementById(`input-ans-${qid}`);
+          const val = input.value.trim().replace(",", ".");
+          const feedback = document.getElementById(`feedback-${qid}`);
+
+          const expected = q.correctAnswer.replace(",", ".");
+          if (val === expected || Math.abs(parseFloat(val) - parseFloat(expected)) < 0.05) {
+            input.classList.remove("border-rose-400", "bg-rose-50");
+            input.classList.add("border-emerald-500", "bg-emerald-50");
+            feedback.innerHTML = '<span class="text-emerald-600"><i class="fa-solid fa-check"></i> Đáp số chính xác! (+15đ)</span>';
+            state.score += 15;
+            updateScoreDisplay();
+          } else {
+            input.classList.remove("border-emerald-500", "bg-emerald-50");
+            input.classList.add("border-rose-400", "bg-rose-50");
+            feedback.innerHTML = '<span class="text-rose-600"><i class="fa-solid fa-xmark"></i> Sai số hoặc chưa đúng. Thử lại!</span>';
+            addMistake(q);
+          }
+        });
+      });
+
+      // Hints
+      document.querySelectorAll(".btn-hint-1").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+          const q = ch.questions.find(item => item.id === qid);
+          const box = document.getElementById(`hint-box-${qid}`);
+          const btn2 = document.querySelector(`.btn-hint-2[data-qid="${qid}"]`);
+
+          box.classList.remove("hidden");
+          box.innerHTML = `
+            <div class="p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-amber-950">
+              <span class="font-bold text-amber-800"><i class="fa-solid fa-lightbulb"></i> Gợi ý cấp 1 (Ý tưởng):</span> ${q.hints[0]}
+            </div>
+          `;
+          if (q.hints.length > 1 && btn2) {
+            btn2.classList.remove("hidden");
+          }
+          renderAllMath();
+        });
+      });
+
+      document.querySelectorAll(".btn-hint-2").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+          const q = ch.questions.find(item => item.id === qid);
+          const box = document.getElementById(`hint-box-${qid}`);
+
+          box.innerHTML += `
+            <div class="p-3 bg-amber-100/70 border border-amber-300 rounded-xl text-amber-950">
+              <span class="font-bold text-amber-800"><i class="fa-solid fa-wand-magic-sparkles"></i> Gợi ý cấp 2 (Bước đầu):</span> ${q.hints[1]}
+            </div>
+          `;
+          btn.classList.add("hidden");
+          renderAllMath();
+        });
+      });
+
+      // Show Solution
+      document.querySelectorAll(".btn-show-solution").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const box = document.getElementById(`solution-box-${qid}`);
+          box.classList.toggle("hidden");
+          renderAllMath();
+        });
+      });
+
+      // Bookmark
+      document.querySelectorAll(".btn-bookmark-question").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const qid = btn.dataset.qid;
+          const ch = APP_DATA[state.grade].chapters.find(c => c.id === state.currentChapterId);
+          const q = ch.questions.find(item => item.id === qid);
+
+          const idx = state.mistakes.findIndex(m => m.id === qid);
+          if (idx >= 0) {
+            state.mistakes.splice(idx, 1);
+            btn.innerHTML = '<i class="fa-regular fa-bookmark"></i>';
+            btn.className = "btn-bookmark-question text-sm p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100";
+            showToast("Đã xóa khỏi sổ tay câu sai");
+          } else {
+            state.mistakes.push(q);
+            btn.innerHTML = '<i class="fa-solid fa-bookmark"></i>';
+            btn.className = "btn-bookmark-question text-sm p-1.5 rounded-lg text-rose-500 hover:bg-rose-50";
+            showToast("Đã lưu vào sổ tay câu sai!", "fa-bookmark");
+          }
+          saveMistakes();
+          updateMistakeBadge();
+        });
+      });
+    }
+
+    function addMistake(q) {
+      if (!state.mistakes.some(m => m.id === q.id)) {
+        state.mistakes.push(q);
+        saveMistakes();
+        updateMistakeBadge();
+      }
+    }
+
+    function saveMistakes() {
+      try {
+        localStorage.setItem("mathconnect_mistakes", JSON.stringify(state.mistakes));
+        localStorage.setItem("mathconnect_score", state.score.toString());
+      } catch (e) {}
+    }
+
+    function updateScoreDisplay() {
+      document.getElementById("score-counter").textContent = `${state.score.toLocaleString('vi-VN')} đ`;
+      saveMistakes();
+    }
+
+    function updateMistakeBadge() {
+      const badge = document.getElementById("mistake-badge");
+      badge.textContent = state.mistakes.length;
+      if (state.mistakes.length === 0) {
+        badge.classList.add("hidden");
+      } else {
+        badge.classList.remove("hidden");
+      }
+    }
+
+    function openMistakesModal() {
+      const modal = document.getElementById("mistake-modal");
+      const container = document.getElementById("mistakes-container");
+      modal.classList.remove("hidden");
+
+      if (state.mistakes.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-400 text-xs">
+            <i class="fa-solid fa-circle-check text-4xl mb-2 text-emerald-400"></i>
+            <p>Tuyệt vời! Hiện không có câu hỏi nào cần lưu tâm trong sổ tay.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = state.mistakes.map((q, i) => `
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 text-xs">
+          <div class="flex items-center justify-between font-bold text-slate-700">
+            <span>Câu #${i + 1} (${q.difficulty})</span>
+            <button class="btn-remove-single-mistake text-rose-500 hover:text-rose-700" data-qid="${q.id}">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+          <div class="text-slate-800 line-clamp-2">${q.content}</div>
+          <div class="text-indigo-600 font-semibold pt-1 border-t border-slate-200">
+            Đáp án chuẩn: ${q.correctAnswer || 'Xem lời giải'}
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll(".btn-remove-single-mistake").forEach(b => {
+        b.addEventListener("click", () => {
+          const qid = b.dataset.qid;
+          state.mistakes = state.mistakes.filter(m => m.id !== qid);
+          saveMistakes();
+          updateMistakeBadge();
+          openMistakesModal();
+        });
+      });
+      renderAllMath();
+    }
+
+    function closeMistakesModal() {
+      document.getElementById("mistake-modal").classList.add("hidden");
+    }
+
+    function clearMistakes() {
+      state.mistakes = [];
+      saveMistakes();
+      updateMistakeBadge();
+      openMistakesModal();
+      showToast("Đã xóa sạch sổ tay câu sai");
+    }
+
+    // --- STATISTICS & CASIO TOOLKIT LOGIC ---
+    function initStatisticsTool() {
+      renderStatInputTable();
+
+      document.getElementById("btn-add-stat-row").addEventListener("click", () => {
+        const last = state.statsData[state.statsData.length - 1];
+        const step = last ? (last.max - last.min) : 4;
+        const newMin = last ? last.max : 0;
+        state.statsData.push({ min: newMin, max: newMin + step, freq: 5 });
+        renderStatInputTable();
+      });
+
+      document.getElementById("btn-compute-statistics").addEventListener("click", computeStatistics);
+
+      document.getElementById("btn-sample-data-1").addEventListener("click", () => {
+        state.statsData = [
+          { min: 0, max: 4, freq: 4 },
+          { min: 4, max: 8, freq: 12 },
+          { min: 8, max: 12, freq: 18 },
+          { min: 12, max: 16, freq: 11 },
+          { min: 16, max: 20, freq: 5 }
+        ];
+        renderStatInputTable();
+        computeStatistics();
+      });
+
+      document.getElementById("btn-sample-data-2").addEventListener("click", () => {
+        state.statsData = [
+          { min: 50, max: 55, freq: 8 },
+          { min: 55, max: 60, freq: 15 },
+          { min: 60, max: 65, freq: 24 },
+          { min: 65, max: 70, freq: 18 },
+          { min: 70, max: 75, freq: 5 }
+        ];
+        renderStatInputTable();
+        computeStatistics();
+      });
+
+      computeStatistics();
+    }
+
+    function renderStatInputTable() {
+      const tbody = document.getElementById("stat-table-body");
+      tbody.innerHTML = "";
+
+      state.statsData.forEach((row, i) => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50";
+        tr.innerHTML = `
+          <td class="p-2.5">
+            <div class="flex items-center gap-1 font-semibold text-xs">
+              <span>[</span>
+              <input type="number" class="w-12 p-1 border rounded text-center stat-input-min" data-idx="${i}" value="${row.min}">
+              <span>;</span>
+              <input type="number" class="w-12 p-1 border rounded text-center stat-input-max" data-idx="${i}" value="${row.max}">
+              <span>)</span>
+            </div>
+          </td>
+          <td class="p-2.5">
+            <input type="number" min="0" class="w-16 p-1 border rounded font-semibold text-center stat-input-freq" data-idx="${i}" value="${row.freq}">
+          </td>
+          <td class="p-2.5 text-center">
+            <button class="text-slate-400 hover:text-rose-500 btn-del-stat-row" data-idx="${i}">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Events for table inputs
+      document.querySelectorAll(".stat-input-min").forEach(inp => {
+        inp.onchange = (e) => { state.statsData[e.target.dataset.idx].min = parseFloat(e.target.value) || 0; };
+      });
+      document.querySelectorAll(".stat-input-max").forEach(inp => {
+        inp.onchange = (e) => { state.statsData[e.target.dataset.idx].max = parseFloat(e.target.value) || 0; };
+      });
+      document.querySelectorAll(".stat-input-freq").forEach(inp => {
+        inp.onchange = (e) => { state.statsData[e.target.dataset.idx].freq = parseInt(e.target.value, 10) || 0; };
+      });
+      document.querySelectorAll(".btn-del-stat-row").forEach(b => {
+        b.onclick = () => {
+          if (state.statsData.length > 2) {
+            state.statsData.splice(b.dataset.idx, 1);
+            renderStatInputTable();
+            computeStatistics();
+          } else {
+            showToast("Phải có ít nhất 2 nhóm!", "fa-triangle-exclamation");
+          }
+        };
+      });
+    }
+
+    function computeStatistics() {
+      const data = state.statsData;
+      let n = 0;
+      let sumMC = 0;
+      let cumFreq = 0;
+      const processed = [];
+
+      data.forEach((row, idx) => {
+        const c_i = (row.min + row.max) / 2;
+        const h_i = row.max - row.min;
+        n += row.freq;
+        sumMC += row.freq * c_i;
+        cumFreq += row.freq;
+        processed.push({
+          ...row,
+          c_i,
+          h_i,
+          cumFreq
+        });
+      });
+
+      const mean = n > 0 ? (sumMC / n) : 0;
+
+      // Median (Me)
+      const halfN = n / 2;
+      let medianGroup = processed.find(g => g.cumFreq >= halfN) || processed[0];
+      const prevCumMed = processed[processed.indexOf(medianGroup) - 1]?.cumFreq || 0;
+      const median = medianGroup.freq > 0
+        ? medianGroup.min + ((halfN - prevCumMed) / medianGroup.freq) * medianGroup.h_i
+        : 0;
+
+      // Q1 (Quartile 1)
+      const q1Pos = n / 4;
+      let q1Group = processed.find(g => g.cumFreq >= q1Pos) || processed[0];
+      const prevCumQ1 = processed[processed.indexOf(q1Group) - 1]?.cumFreq || 0;
+      const q1 = q1Group.freq > 0
+        ? q1Group.min + ((q1Pos - prevCumQ1) / q1Group.freq) * q1Group.h_i
+        : 0;
+
+      // Q3 (Quartile 3)
+      const q3Pos = (3 * n) / 4;
+      let q3Group = processed.find(g => g.cumFreq >= q3Pos) || processed[processed.length - 1];
+      const prevCumQ3 = processed[processed.indexOf(q3Group) - 1]?.cumFreq || 0;
+      const q3 = q3Group.freq > 0
+        ? q3Group.min + ((q3Pos - prevCumQ3) / q3Group.freq) * q3Group.h_i
+        : 0;
+
+      // Mode (Mo)
+      let maxFreq = -1;
+      let modeGroupIdx = 0;
+      processed.forEach((g, idx) => {
+        if (g.freq > maxFreq) {
+          maxFreq = g.freq;
+          modeGroupIdx = idx;
+        }
+      });
+      const mg = processed[modeGroupIdx];
+      const prevFreq = processed[modeGroupIdx - 1]?.freq || 0;
+      const nextFreq = processed[modeGroupIdx + 1]?.freq || 0;
+      const d1 = mg.freq - prevFreq;
+      const d2 = mg.freq - nextFreq;
+      const mode = (d1 + d2 > 0) ? mg.min + (d1 / (d1 + d2)) * mg.h_i : mg.c_i;
+
+      // Update DOM
+      document.getElementById("stat-val-n").textContent = n;
+      document.getElementById("stat-val-mean").textContent = mean.toFixed(2);
+      document.getElementById("stat-val-median").textContent = median.toFixed(2);
+      document.getElementById("stat-val-mode").textContent = mode.toFixed(2);
+
+      document.getElementById("stat-val-q1").textContent = q1.toFixed(2);
+      document.getElementById("stat-val-q2").textContent = median.toFixed(2);
+      document.getElementById("stat-val-q3").textContent = q3.toFixed(2);
+      document.getElementById("stat-val-iqr").textContent = (q3 - q1).toFixed(2);
+
+      // Detailed Steps
+      const stepsDiv = document.getElementById("stat-calculation-steps");
+      stepsDiv.innerHTML = `
+        <div class="font-bold text-slate-800 text-xs mb-1">Quy Trình Tính Toán Từng Bước:</div>
+        <div>1. <b>Cỡ mẫu:</b> $n = ${processed.map(p => p.freq).join(' + ')} = ${n}$.</div>
+        <div>2. <b>Số trung bình:</b> $\bar{x} = \frac{${processed.map(p => `${p.freq}\cdot${p.c_i}`).join(' + ')}}{${n}} = ${mean.toFixed(2)}$.</div>
+        <div>3. <b>Trung vị:</b> Mốc $\frac{n}{2} = ${halfN}$. Nhóm chứa trung vị là $[${medianGroup.min}; ${medianGroup.max})$.</div>
+        <div class="pl-3 text-indigo-700">$\Rightarrow M_e = ${medianGroup.min} + \frac{${halfN} - ${prevCumMed}}{${medianGroup.freq}} \cdot ${medianGroup.h_i} = ${median.toFixed(2)}$.</div>
+        <div>4. <b>Mốt:</b> Nhóm $[${mg.min}; ${mg.max})$ có tần số lớn nhất ($m_j = ${mg.freq}$).</div>
+        <div class="pl-3 text-indigo-700">$\Rightarrow M_o = ${mg.min} + \frac{${mg.freq} - ${prevFreq}}{(${mg.freq} - ${prevFreq}) + (${mg.freq} - ${nextFreq})} \cdot ${mg.h_i} = ${mode.toFixed(2)}$.</div>
+      `;
+
+      renderStatisticsChart();
+      renderAllMath();
+    }
+
+    function renderStatisticsChart() {
+      const ctx = document.getElementById("stat-histogram-chart");
+      if (!ctx) return;
+
+      const labels = state.statsData.map(r => `[${r.min}; ${r.max})`);
+      const freqs = state.statsData.map(r => r.freq);
+
+      if (state.chartInstance) {
+        state.chartInstance.destroy();
+      }
+
+      state.chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Tần số số liệu',
+            data: freqs,
+            backgroundColor: 'rgba(99, 102, 241, 0.65)',
+            borderColor: 'rgba(79, 70, 229, 1)',
+            borderWidth: 2,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: { stepSize: 2 }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    // --- MOCK EXAM SIMULATOR LOGIC ---
+    function initExam() {
+      const examQuestions = [
+        // Part 1: Multiple choice
+        {
+          id: "ex_1",
+          part: "I",
+          format: "multiple_choice_4",
+          content: "Câu 1: Cho bất phương trình $x - 2y + 4 > 0$. Miền nghiệm chứa điểm nào sau đây?",
+          options: [{ id: "A", text: "$(0; 0)$" }, { id: "B", text: "$(0; 3)$" }, { id: "C", text: "(-5; 0)" }, { id: "D", text: "(-4; 1)" }],
+          correctAnswer: "A"
+        },
+        {
+          id: "ex_2",
+          part: "I",
+          format: "multiple_choice_4",
+          content: "Câu 2: Số hạng đầu $u_1 = 2$, công bội $q = 3$ của cấp số nhân. Số hạng $u_4$ bằng:",
+          options: [{ id: "A", text: "54" }, { id: "B", text: "18" }, { id: "C", text: "162" }, { id: "D", text: "24" }],
+          correctAnswer: "A"
+        },
+        {
+          id: "ex_3",
+          part: "I",
+          format: "multiple_choice_4",
+          content: "Câu 3: Đồ thị hàm số $y = \frac{x - 1}{x + 1}$ có đường tiệm cận ngang là:",
+          options: [{ id: "A", text: "$y = 1$" }, { id: "B", text: "$y = -1$" }, { id: "C", text: "$x = -1$" }, { id: "D", text: "$x = 1$" }],
+          correctAnswer: "A"
+        },
+        {
+          id: "ex_4",
+          part: "I",
+          format: "multiple_choice_4",
+          content: "Câu 4: Mẫu số liệu ghép nhóm có $n=40$. Vị trí xác định nhóm chứa trung vị là:",
+          options: [{ id: "A", text: "10" }, { id: "B", text: "20" }, { id: "C", text: "30" }, { id: "D", text: "40" }],
+          correctAnswer: "B"
+        },
+        // Part 2: True/False
+        {
+          id: "ex_5",
+          part: "II",
+          format: "true_false_4",
+          content: "Câu 5: Khảo sát mẫu số liệu điểm kiểm tra của 40 học sinh lớp 11 với bảng ghép nhóm sau:<br><span class='text-xs font-mono'>[4;6): 8 HS, [6;8): 20 HS, [8;10): 12 HS</span>. Xét tính Đúng/Sai:",
+          subQuestions: [
+            { id: "a", statement: "Nhóm chứa mốt là nhóm $[6; 8)$.", isCorrect: true },
+            { id: "b", statement: "Trung vị của mẫu điểm thuộc nhóm $[4; 6)$.", isCorrect: false },
+            { id: "c", statement: "Điểm trung bình $\bar{x} = 7,2$.", isCorrect: true },
+            { id: "d", statement: "Có $50\%$ số học sinh đạt điểm từ 7 trở lên.", isCorrect: true }
+          ]
+        },
+        {
+          id: "ex_6",
+          part: "II",
+          format: "true_false_4",
+          content: "Câu 6: Cho hàm số $f(x) = x^3 - 3x + 2$. Xét tính Đúng/Sai của các mệnh đề sau:",
+          subQuestions: [
+            { id: "a", statement: "Hàm số đồng biến trên khoảng $(1; +\infty)$.", isCorrect: true },
+            { id: "b", statement: "Hàm số đạt cực đại tại $x = 1$.", isCorrect: false },
+            { id: "c", statement: "Giá trị cực tiểu của hàm số bằng $0$.", isCorrect: true },
+            { id: "d", statement: "Đồ thị hàm số có tâm đối xứng là $I(0; 2)$.", isCorrect: true }
+          ]
+        },
+        // Part 3: Short answer
+        {
+          id: "ex_7",
+          part: "III",
+          format: "short_answer",
+          content: "Câu 7: Một hình chữ nhật có chu vi $40$ cm. Diện tích lớn nhất của hình chữ nhật đó bằng bao nhiêu cm²?",
+          correctAnswer: "100"
+        },
+        {
+          id: "ex_8",
+          part: "III",
+          format: "short_answer",
+          content: "Câu 8: Cho cấp số cộng có $u_1 = 5, d = 3$. Tính tổng của $10$ số hạng đầu tiên.",
+          correctAnswer: "185"
+        }
+      ];
+
+      // Render Questions
+      const container = document.getElementById("exam-questions-container");
+      const omrGrid = document.getElementById("omr-grid-buttons");
+      container.innerHTML = "";
+      omrGrid.innerHTML = "";
+
+      examQuestions.forEach((q, idx) => {
+        const div = document.createElement("div");
+        div.className = "bg-slate-50/70 p-5 rounded-2xl border border-slate-200 space-y-3";
+        div.id = `exam-q-anchor-${q.id}`;
+
+        let partTitle = "";
+        if (q.part === "I") partTitle = `<span class="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">PHẦN I (Nhiều lựa chọn)</span>`;
+        else if (q.part === "II") partTitle = `<span class="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">PHẦN II (Đúng/Sai)</span>`;
+        else partTitle = `<span class="bg-amber-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">PHẦN III (Điền số)</span>`;
+
+        div.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-md bg-indigo-900 text-white flex items-center justify-center text-xs font-bold">${idx + 1}</span>
+              ${partTitle}
+            </div>
+            <span class="text-xs text-slate-400 font-medium">1 điểm</span>
+          </div>
+          <div class="text-sm font-semibold text-slate-800 leading-relaxed">${q.content}</div>
+          <div class="exam-input-area">${renderExamInputArea(q)}</div>
+        `;
+        container.appendChild(div);
+
+        // OMR Button
+        const omrBtn = document.createElement("button");
+        omrBtn.className = "omr-btn h-9 rounded-lg bg-white border border-slate-300 font-bold text-xs text-slate-700 hover:border-indigo-500 transition";
+        omrBtn.id = `omr-btn-${q.id}`;
+        omrBtn.textContent = `C${idx + 1}`;
+        omrBtn.onclick = () => {
+          document.getElementById(`exam-q-anchor-${q.id}`).scrollIntoView({ behavior: 'smooth' });
+        };
+        omrGrid.appendChild(omrBtn);
+      });
+
+      attachExamInputHandlers(examQuestions);
+      startExamTimer();
+
+      // Submit Exam
+      document.getElementById("btn-submit-exam").addEventListener("click", () => {
+        finishExam(examQuestions);
+      });
+
+      document.getElementById("btn-close-exam-result").addEventListener("click", () => {
+        document.getElementById("exam-result-modal").classList.add("hidden");
+        document.getElementById("tab-nav-practice").click();
+      });
+    }
+
+    function renderExamInputArea(q) {
+      if (q.format === "multiple_choice_4") {
+        return `
+          <div class="grid grid-cols-2 gap-2 mt-2">
+            ${q.options.map(opt => `
+              <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-white cursor-pointer hover:border-indigo-400 text-xs font-medium">
+                <input type="radio" name="exam_${q.id}" value="${opt.id}" class="exam-radio text-indigo-600 focus:ring-0" data-qid="${q.id}">
+                <span class="font-bold text-indigo-900">${opt.id}.</span> ${opt.text}
+              </label>
+            `).join('')}
+          </div>
+        `;
+      } else if (q.format === "true_false_4") {
+        return `
+          <div class="space-y-1.5 mt-2">
+            ${q.subQuestions.map(sub => `
+              <div class="flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200 text-xs">
+                <div class="font-medium text-slate-800"><span class="font-bold">${sub.id})</span> ${sub.statement}</div>
+                <div class="flex items-center gap-3">
+                  <label class="flex items-center gap-1 cursor-pointer">
+                    <input type="radio" name="exam_tf_${q.id}_${sub.id}" value="true" class="exam-tf-radio" data-qid="${q.id}" data-sub="${sub.id}">
+                    <span class="font-semibold text-emerald-700">Đ</span>
+                  </label>
+                  <label class="flex items-center gap-1 cursor-pointer">
+                    <input type="radio" name="exam_tf_${q.id}_${sub.id}" value="false" class="exam-tf-radio" data-qid="${q.id}" data-sub="${sub.id}">
+                    <span class="font-semibold text-rose-700">S</span>
+                  </label>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      } else if (q.format === "short_answer") {
+        return `
+          <div class="mt-2 flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-500">Đáp số:</span>
+            <input type="text" class="exam-short-input bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs font-semibold w-40" data-qid="${q.id}" placeholder="Điền số...">
+          </div>
+        `;
+      }
+      return "";
+    }
+
+    function attachExamInputHandlers(examQuestions) {
+      const updateOMR = (qid) => {
+        const btn = document.getElementById(`omr-btn-${qid}`);
+        if (btn) {
+          btn.className = "omr-btn h-9 rounded-lg bg-indigo-600 text-white font-bold text-xs shadow-xs";
+        }
+        const count = Object.keys(state.exam.answers).length;
+        document.getElementById("omr-completed-count").textContent = `${count}/${examQuestions.length} đã làm`;
+      };
+
+      document.querySelectorAll(".exam-radio").forEach(inp => {
+        inp.addEventListener("change", (e) => {
+          const qid = e.target.dataset.qid;
+          state.exam.answers[qid] = e.target.value;
+          updateOMR(qid);
+        });
+      });
+
+      document.querySelectorAll(".exam-tf-radio").forEach(inp => {
+        inp.addEventListener("change", (e) => {
+          const qid = e.target.dataset.qid;
+          const sub = e.target.dataset.sub;
+          if (!state.exam.answers[qid]) state.exam.answers[qid] = {};
+          state.exam.answers[qid][sub] = (e.target.value === "true");
+          updateOMR(qid);
+        });
+      });
+
+      document.querySelectorAll(".exam-short-input").forEach(inp => {
+        inp.addEventListener("input", (e) => {
+          const qid = e.target.dataset.qid;
+          const val = e.target.value.trim();
+          if (val) {
+            state.exam.answers[qid] = val;
+            updateOMR(qid);
+          }
+        });
+      });
+    }
+
+    function startExamTimer() {
+      if (state.exam.timerInterval) clearInterval(state.exam.timerInterval);
+      const timerDisplay = document.getElementById("exam-timer");
+
+      state.exam.timerInterval = setInterval(() => {
+        if (state.exam.timeRemaining <= 0) {
+          clearInterval(state.exam.timerInterval);
+          finishExam();
+          return;
+        }
+        state.exam.timeRemaining--;
+        const mins = Math.floor(state.exam.timeRemaining / 60);
+        const secs = state.exam.timeRemaining % 60;
+        timerDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    function finishExam(examQuestions) {
+      clearInterval(state.exam.timerInterval);
+      let correctQuestions = 0;
+      let totalQuestions = examQuestions.length;
+
+      examQuestions.forEach(q => {
+        const ans = state.exam.answers[q.id];
+        if (q.format === "multiple_choice_4") {
+          if (ans === q.correctAnswer) correctQuestions++;
+        } else if (q.format === "true_false_4") {
+          let allSubCorrect = true;
+          if (ans) {
+            q.subQuestions.forEach(sub => {
+              if (ans[sub.id] !== sub.isCorrect) allSubCorrect = false;
+            });
+          } else {
+            allSubCorrect = false;
+          }
+          if (allSubCorrect) correctQuestions++;
+        } else if (q.format === "short_answer") {
+          if (ans && ans.replace(",", ".") === q.correctAnswer.replace(",", ".")) {
+            correctQuestions++;
+          }
+        }
+      });
+
+      const scoreOutOf10 = ((correctQuestions / totalQuestions) * 10).toFixed(1);
+      const elapsed = (45 * 60) - state.exam.timeRemaining;
+      const elMins = Math.floor(elapsed / 60);
+      const elSecs = elapsed % 60;
+
+      document.getElementById("res-score").textContent = `${scoreOutOf10} / 10`;
+      document.getElementById("res-correct").textContent = `${correctQuestions} / ${totalQuestions}`;
+      document.getElementById("res-time").textContent = `${elMins}p ${elSecs}s`;
+
+      const modal = document.getElementById("exam-result-modal");
+      modal.classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
